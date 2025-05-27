@@ -8,13 +8,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(
-    @Body("email") email: string,  // tương ứng với const email = req.body.email
-    @Body("password") password: string,
-    @Body("name") name: string
-  ) {
-
-    return this.usersService.create(email, password, name);
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 
   @Get()
