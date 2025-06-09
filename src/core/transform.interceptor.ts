@@ -35,7 +35,7 @@ export class TransformInterceptor<T>
                             context.getHandler(),
                         ) || '',
                     data: {
-                        result: data.result,
+                        result: data,
                         meta: {} // if this is supposed to be the actual return then replace {} with data.result
                     }
                 })),
