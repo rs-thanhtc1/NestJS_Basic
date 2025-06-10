@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { use } from 'passport';
+import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
+import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
 import { IUser } from 'src/users/users.interface';
 import { UsersService } from 'src/users/users.service';
 
@@ -18,6 +23,13 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  async create(registerUserDto: RegisterUserDto) {
+    let user = await this.usersService.register({
+      ...registerUserDto
+    })
+    return { _id: user?._id, createdAt: user?.createdAt }
   }
 
   async login(user: IUser) {

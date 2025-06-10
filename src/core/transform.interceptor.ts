@@ -34,10 +34,11 @@ export class TransformInterceptor<T>
                             RESPONSE_MESSAGE,
                             context.getHandler(),
                         ) || '',
-                    data: {
-                        result: data,
-                        meta: {} // if this is supposed to be the actual return then replace {} with data.result
-                    }
+                    data
+                    // data: {
+                    //     result: data,
+                    //     // meta: {} // if this is supposed to be the actual return then replace {} with data.result
+                    // }
                 })),
             );
     }
