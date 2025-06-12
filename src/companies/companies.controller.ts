@@ -16,8 +16,8 @@ export class CompaniesController {
   @Get()
   @ResponseMessage("Fetch List Company with paginate")
   findAll(
-    @Query("page") currentPage: string, // -> const currentPage: string = req.query.page
-    @Query("limit") limit: string,       // -> const limit: string = req.query.limit
+    @Query("current") currentPage: string, // -> const currentPage: string = req.query.page
+    @Query("pageSize") limit: string,       // -> const limit: string = req.query.limit
     @Query() qs: string
 
   ) {
