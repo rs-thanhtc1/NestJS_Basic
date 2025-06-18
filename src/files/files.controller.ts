@@ -12,7 +12,7 @@ export class FilesController {
   @Public()
   @Post('upload')
   @ResponseMessage('Upload file success')
-  @UseInterceptors(FileInterceptor('file')) //tên field sử dụng trong form-data
+  @UseInterceptors(FileInterceptor('fileUpload')) //tên field sử dụng trong form-data
   uploadFile(@UploadedFile(
     new ParseFilePipeBuilder()
       .addFileTypeValidator({
@@ -26,6 +26,7 @@ export class FilesController {
       }),
 
   ) file: Express.Multer.File) {
+    console.log('Original file name:', file.originalname);
     return {
       fileName: file.filename
     }

@@ -8,6 +8,9 @@ class Company {
 
     @IsNotEmpty()
     name: string;
+
+    @IsNotEmpty()
+    logo: string;
 }
 
 // dto -> data transfer object
@@ -36,6 +39,9 @@ export class CreateJobDto {
 
     @IsNotEmpty({ message: 'Description không được để trống' })
     description: string;
+
+    @IsNotEmpty({ message: 'Location không được để trống' })
+    location: string;
 
     @IsNotEmpty({ message: 'startDate không được để trống' })
     @IsDate({ message: 'startDate phải là ngày hợp lệ' })

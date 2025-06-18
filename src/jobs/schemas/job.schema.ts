@@ -15,6 +15,7 @@ export class Job {
     company: {
         _id: mongoose.Schema.Types.ObjectId;
         email: string;
+        logo: string;
     };
 
     @Prop()
@@ -28,6 +29,9 @@ export class Job {
 
     @Prop()
     description: string;
+
+    @Prop()
+    location: string;
 
     @Prop()
     startDate: Date;
