@@ -54,8 +54,11 @@ export class CompaniesService {
 
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} company`;
+  async findOne(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new NotFoundException("id không hợp lý")
+    }
+    return await this.companyModel.findById(id);
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
