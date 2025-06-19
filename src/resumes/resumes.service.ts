@@ -58,6 +58,7 @@ export class ResumesService {
       // @ts-ignore: Unreachable code error
       .sort(sort)
       .populate(population)
+      .select(projection as any)
       .exec();
 
     return {
