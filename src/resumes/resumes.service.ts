@@ -79,7 +79,7 @@ export class ResumesService {
   async update(id: string, updateResumeDto: UpdateResumeDto, user: IUser) {
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new NotFoundException('Job không tồn tại');
+      throw new NotFoundException('Resume không tồn tại');
     }
 
     const existingResume = this.resumeModel.findById(id);
