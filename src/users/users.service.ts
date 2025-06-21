@@ -109,13 +109,14 @@ export class UsersService {
 
     return this.userModel.findOne({
       _id: id
-    }).select('-password');
+    }).select('-password')
+      .populate({ path: "role", select: { name: 1 } });
   }
 
   findOneByUsername(username: string) {
     return this.userModel.findOne({
       email: username
-    });
+    }).populate({ path: "role", select: { name: 1, permissions: 1 } });
   }
 
   isValidPassword(password: string, hash: string) {
@@ -139,6 +140,11 @@ export class UsersService {
     const existingUser = await this.userModel.findById(id);
     if (!existingUser) {
       throw new NotFoundException('User không tồn tại');
+    }
+
+    const foundUser = await this.userModel.findById(id)
+    if (foundUser.email = "admin@gmail.com") {
+      throw new BadRequestException("Không thể xóa tài khoản admin@gmail.com")
     }
 
     // Cập nhật deletedBy

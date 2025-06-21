@@ -69,19 +69,12 @@ export class RolesService {
       throw new NotFoundException('Id không không hợp lệ');
     }
 
-    return (await this.roleModel.findById(id)).populate({ path: "permissions", select: { _id: 1, apiPath: 1, name: 1, method: 1 } });
+    return (await this.roleModel.findById(id)).populate({ path: "permissions", select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 } });
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new NotFoundException('Id không không hợp lệ');
-    }
-
-    const { name } = updateRoleDto
-    const existed = await this.roleModel.findOne({ name })
-    if (existed) {
-      throw new BadRequestException(`Role với name là ${name} đã tồn tại`);
-
     }
 
     const existingRole = this.roleModel.findById(id);
@@ -104,10 +97,11 @@ export class RolesService {
       throw new NotFoundException('Id không không hợp lệ');
     }
 
-    const existingRole = this.roleModel.findById(id);
-    if (!existingRole) {
-      throw new NotFoundException('Role không tồn tại');
+    const foundRole = await this.roleModel.findById(id)
+    if (foundRole.name = "ADMIN") {
+      throw new BadRequestException("Không thể xóa role ADMIN")
     }
+
     await this.roleModel.updateOne({ _id: id },
       {
         deletedBy: {
