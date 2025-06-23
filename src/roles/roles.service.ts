@@ -99,7 +99,7 @@ export class RolesService {
     }
 
     const foundRole = await this.roleModel.findById(id)
-    if (foundRole.name === ADMIN_ROLE) {
+    if (foundRole && foundRole.name === ADMIN_ROLE) {
       throw new BadRequestException("Không thể xóa role ADMIN")
     }
 
