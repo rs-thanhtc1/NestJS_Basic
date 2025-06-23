@@ -9,11 +9,18 @@ import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
 import aqp from 'api-query-params';
+import { Role, RoleDocument } from 'src/roles/schemas/role.schema';
+import { USER_ROLE } from 'src/databases/sample';
 
 @Injectable()
 export class UsersService {
 
-  constructor(@InjectModel(User.name) private userModel: SoftDeleteModel<UserDocument>) { }
+  constructor(
+    @InjectModel(User.name) private userModel: SoftDeleteModel<UserDocument>,
+
+    @InjectModel(Role.name) private roleModel: SoftDeleteModel<RoleDocument>
+
+  ) { }
 
   getHashPassword = (password: string) => {
     const salt = genSaltSync(10);
@@ -52,6 +59,8 @@ export class UsersService {
       throw new BadRequestException(`Email: ${registerUserDto.email} đã được sử dụng để đăng ký`);
     }
 
+    const userRole = await this.roleModel.findOne({ name: USER_ROLE })
+
     const hashPassword = this.getHashPassword(registerUserDto.password);
 
     let user = await this.userModel.create({
@@ -61,7 +70,7 @@ export class UsersService {
       age: registerUserDto.age,
       gender: registerUserDto.gender,
       address: registerUserDto.address,
-      role: 'USER'
+      role: userRole?._id
     })
     return user;
   }
@@ -116,7 +125,7 @@ export class UsersService {
   findOneByUsername(username: string) {
     return this.userModel.findOne({
       email: username
-    }).populate({ path: "role", select: { name: 1, permissions: 1 } });
+    }).populate({ path: "role", select: { name: 1 } });
   }
 
   isValidPassword(password: string, hash: string) {
@@ -170,7 +179,7 @@ export class UsersService {
   }
 
   findUserByToken = async (refreshToken: string) => {
-    return await this.userModel.findOne({ refreshToken })
+    return await this.userModel.findOne({ refreshToken }).populate({ path: "role", select: { name: 1 } });
   }
 
 }
