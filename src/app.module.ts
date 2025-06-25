@@ -15,18 +15,19 @@ import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { MailModule } from './mail/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     // MongooseModule.forRoot('mongodb+srv://thanhtc1:d3E4XvIwZsw4GRLK@cluster0.m8myntw.mongodb.net/'),
-    
+    ScheduleModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URL'),
         connectionFactory: (connection) => {
-        connection.plugin(softDeletePlugin);
-        return connection;
+          connection.plugin(softDeletePlugin);
+          return connection;
         }
 
       }),
@@ -34,7 +35,7 @@ import { MailModule } from './mail/mail.module';
     }),
 
     ConfigModule.forRoot({
-    isGlobal: true
+      isGlobal: true
     }),
 
     UsersModule,
@@ -57,8 +58,8 @@ import { MailModule } from './mail/mail.module';
 
     SubscribersModule,
 
-    MailModule
-   ],
+    MailModule,
+  ],
   controllers: [AppController],
   providers: [AppService,
     // {
@@ -67,4 +68,4 @@ import { MailModule } from './mail/mail.module';
     // }
   ],
 })
-export class AppModule {}
+export class AppModule { }

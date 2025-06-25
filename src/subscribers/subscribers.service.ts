@@ -71,19 +71,17 @@ export class SubscribersService {
     return await this.subscriberModel.findById(id);
   }
 
-  async update(id: string, updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
+  async update(updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new NotFoundException('Id không không hợp lệ');
-    }
-
-    return await this.subscriberModel.updateOne({ _id: id }, {
+    return await this.subscriberModel.updateOne({ email: updateSubscriberDto.email }, {
       ...updateSubscriberDto,
       updatedBy: {
         _id: user._id,
         email: user.email
       }
-    });
+    },
+      { upsert: true }
+    );
   }
 
   async remove(id: string, user: IUser) {
@@ -96,5 +94,9 @@ export class SubscribersService {
         }
       })
     return await this.subscriberModel.softDelete({ _id: id });
+  }
+
+  async getSkills(user: IUser) {
+    return await this.subscriberModel.findOne({ email: user.email }, { skills: 1 })
   }
 }
